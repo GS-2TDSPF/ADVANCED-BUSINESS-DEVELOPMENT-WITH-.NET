@@ -1,0 +1,6 @@
+@GS_OrbitAlert_HostAddress = http://localhost:5114
+
+GET {{GS_OrbitAlert_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
