@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "CgE7NPJuMoA=",
+  "success": true,
+  "projectFilePath": "/Users/waidemannn_m/Desktop/GS-2026/ADVANCED-BUSINESS-DEVELOPMENT-WITH-.NET/OrbitAlert/OrbitAlert.Domain/OrbitAlert.Domain.csproj",
+  "expectedPackageFiles": [
+    "/Users/waidemannn_m/.nuget/packages/bcrypt.net-next/4.1.0/bcrypt.net-next.4.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
