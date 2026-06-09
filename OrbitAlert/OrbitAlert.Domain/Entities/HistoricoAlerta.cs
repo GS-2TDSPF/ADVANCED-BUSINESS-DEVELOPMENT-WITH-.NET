@@ -9,7 +9,7 @@ public class HistoricoAlerta
     public string? DsObservacao { get; private set; }
     public string? NmUsuarioMod { get; private set; }
     public DateTime DtAlteracao { get; private set; }
-    public virtual Alerta Alerta { get; private set; } = null!;
+    public virtual Alerta Alerta { get; set; } = null!;
 
     public HistoricoAlerta(string? stStatusAnt, string stStatusNovo, int? nrIndiceRisco, string? dsObservacao, string? nmUsuarioMod, Alerta alerta)
     {

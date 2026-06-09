@@ -13,11 +13,13 @@ public interface IHistoricoAlertaService
     bool Delete(long id);
 }
 
-public class HistoricoAlertaService(IHistoricoAlertaRepository repository) : IHistoricoAlertaService
+public class HistoricoAlertaService(IHistoricoAlertaRepository repository, IAlertaRepository alertaRepository) : IHistoricoAlertaService
 {
     public HistoricoAlertaResponse Create(HistoricoAlertaRequest request)
     {
-        var historico = request.ToEntity();
+        var alerta = alertaRepository.GetById(request.IdAlerta)
+            ?? throw new KeyNotFoundException($"Alerta com id '{request.IdAlerta}' não encontrado.");
+        var historico = new Domain.Entities.HistoricoAlerta(request.StStatusAnt, request.StStatusNovo, request.NrIndiceRisco, request.DsObservacao, request.NmUsuarioMod, alerta);
         repository.Add(historico);
         return HistoricoAlertaResponse.ToDTO(historico);
     }

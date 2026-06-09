@@ -8,7 +8,7 @@ public class AnaliseIa
     public string DsModeloIa { get; private set; } = "claude-sonnet-4-20250514";
     public long? NrTokensUsados { get; private set; }
     public DateTime DtGeracao { get; private set; }
-    public virtual Alerta Alerta { get; private set; } = null!;
+    public virtual Alerta Alerta { get; set; } = null!;
 
     public AnaliseIa(string? dsPrompt, string dsResposta, string dsModeloIa, long? nrTokensUsados, Alerta alerta)
     {

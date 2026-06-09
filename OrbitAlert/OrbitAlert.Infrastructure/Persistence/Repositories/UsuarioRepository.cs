@@ -1,23 +1,45 @@
+using Microsoft.EntityFrameworkCore;
 using OrbitAlert.Application.Interfaces.Repositories;
 using OrbitAlert.Domain.Entities;
+using OrbitAlert.Infrastructure.Persistence;
 
 namespace OrbitAlert.Infrastructure.Persistence.Repositories;
 
 public class UsuarioRepository(OrbitAlertContext context) : IUsuarioRepository
 {
-    public IReadOnlyList<Usuario> GetAll() => context.Usuarios.ToList();
-    public Usuario? GetById(long id) => context.Usuarios.FirstOrDefault(u => u.Id == id);
-    public Usuario? GetByEmail(string email) => context.Usuarios.FirstOrDefault(u => u.DsEmail == email);
+    public IReadOnlyList<Usuario> GetAll() =>
+        context.Usuarios.AsNoTracking().ToList();
 
-    public void Add(Usuario usuario) { context.Usuarios.Add(usuario); context.SaveChanges(); }
-    public void Update(Usuario usuario) { context.Usuarios.Update(usuario); context.SaveChanges(); }
+    public Usuario? GetById(long id) =>
+        context.Usuarios.AsNoTracking().FirstOrDefault(u => u.Id == id);
+
+    public Usuario? GetByEmail(string email) =>
+        context.Usuarios.AsNoTracking()
+            .FirstOrDefault(u => u.DsEmail == email);
+
+    public void Add(Usuario usuario)
+    {
+        context.Entry(usuario).State = EntityState.Added;
+        context.SaveChanges();
+    }
+
+    public void Update(Usuario usuario)
+    {
+        context.Entry(usuario).State = EntityState.Modified;
+        context.SaveChanges();
+    }
 
     public bool Delete(long id)
     {
-        var usuario = context.Usuarios.FirstOrDefault(u => u.Id == id);
-        if (usuario is null) return false;
-        context.Usuarios.Remove(usuario);
-        context.SaveChanges();
+        // ✅ FIX: Usar FirstOrDefault ao invés de Any
+        var exists = context.Usuarios.AsNoTracking()
+            .FirstOrDefault(u => u.Id == id) != null;
+        if (!exists) return false;
+
+        context.Database.ExecuteSqlRaw("DELETE FROM TB_USUARIO_MUNICIPIO WHERE ID_USUARIO = {0}", id);
+        context.Database.ExecuteSqlRaw("DELETE FROM TB_NOTIFICACAO WHERE ID_USUARIO = {0}", id);
+        context.Database.ExecuteSqlRaw("DELETE FROM TB_USUARIO WHERE ID_USUARIO = {0}", id);
+
         return true;
     }
 

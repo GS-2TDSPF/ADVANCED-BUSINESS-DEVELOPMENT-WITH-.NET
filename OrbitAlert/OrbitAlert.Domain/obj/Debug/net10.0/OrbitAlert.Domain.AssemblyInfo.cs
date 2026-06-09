@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OrbitAlert.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9953077fc9cbea55ce305dfb57fa3f9da940a518")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+621bdaccf919244a6af54e7e0ca3c6d74204c163")]
 [assembly: System.Reflection.AssemblyProductAttribute("OrbitAlert.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OrbitAlert.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

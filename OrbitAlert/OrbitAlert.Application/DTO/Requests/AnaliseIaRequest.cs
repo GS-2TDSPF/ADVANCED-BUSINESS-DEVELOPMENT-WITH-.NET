@@ -1,5 +1,3 @@
-using OrbitAlert.Domain.Entities;
-
 namespace OrbitAlert.Application.DTO.Requests;
 
 public record AnaliseIaRequest(
@@ -7,7 +5,4 @@ public record AnaliseIaRequest(
     string DsResposta,
     string DsModeloIa,
     long? NrTokensUsados,
-    Alerta Alerta)
-{
-    public AnaliseIa ToEntity() => new(DsPrompt, DsResposta, DsModeloIa, NrTokensUsados, Alerta);
-}
+    long IdAlerta);

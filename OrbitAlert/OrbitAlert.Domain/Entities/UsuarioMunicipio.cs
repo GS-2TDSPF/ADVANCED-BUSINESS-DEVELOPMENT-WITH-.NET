@@ -5,8 +5,8 @@ public class UsuarioMunicipio
     public long IdUsuario { get; private set; }
     public long IdMunicipio { get; private set; }
     public DateTime DtVinculo { get; private set; }
-    public virtual Usuario Usuario { get; private set; } = null!;
-    public virtual Municipio Municipio { get; private set; } = null!;
+    public virtual Usuario Usuario { get; set; } = null!;
+    public virtual Municipio Municipio { get;  set; } = null!;
 
     public UsuarioMunicipio(Usuario usuario, Municipio municipio)
     {

@@ -12,7 +12,7 @@ public class ZonaRisco
     public int NrLimiarAlerta { get; private set; } = 3;
     public string StAtivo { get; private set; } = "S";
     public DateTime DtCadastro { get; private set; }
-    public virtual Municipio Municipio { get; private set; } = null!;
+    public virtual Municipio Municipio { get; set; } = null!;
 
     [JsonIgnore]
     public virtual List<EstacaoIot> Estacoes { get; private set; } = [];

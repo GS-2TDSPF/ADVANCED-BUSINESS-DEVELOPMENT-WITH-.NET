@@ -14,11 +14,13 @@ public interface IZonaRiscoService
     bool Delete(long id);
 }
 
-public class ZonaRiscoService(IZonaRiscoRepository repository) : IZonaRiscoService
+public class ZonaRiscoService(IZonaRiscoRepository repository, IMunicipioRepository municipioRepository) : IZonaRiscoService
 {
     public ZonaRiscoResponse Create(ZonaRiscoRequest request)
     {
-        var zona = request.ToEntity();
+        var municipio = municipioRepository.GetById(request.IdMunicipio)
+            ?? throw new KeyNotFoundException($"Município com id '{request.IdMunicipio}' não encontrado.");
+        var zona = new Domain.Entities.ZonaRisco(request.NmZona, request.DsDescricao, request.NrLatitude, request.NrLongitude, request.NrLimiarAlerta, request.StAtivo, municipio);
         repository.Add(zona);
         return ZonaRiscoResponse.ToDTO(zona);
     }
@@ -39,8 +41,10 @@ public class ZonaRiscoService(IZonaRiscoRepository repository) : IZonaRiscoServi
     {
         var zona = repository.GetById(id)
             ?? throw new KeyNotFoundException("Zona de risco não encontrada.");
-        zona.Transferir(request.NmZona, request.DsDescricao, request.NrLatitude, request.NrLongitude, request.NrLimiarAlerta, request.StAtivo, request.Municipio);
-        repository.SaveChanges();
+        var municipio = municipioRepository.GetById(request.IdMunicipio)
+            ?? throw new KeyNotFoundException($"Município com id '{request.IdMunicipio}' não encontrado.");
+        zona.Transferir(request.NmZona, request.DsDescricao, request.NrLatitude, request.NrLongitude, request.NrLimiarAlerta, request.StAtivo, municipio);
+        repository.Update(zona);
         return ZonaRiscoResponse.ToDTO(zona);
     }
 

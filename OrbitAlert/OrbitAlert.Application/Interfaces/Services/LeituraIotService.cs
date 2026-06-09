@@ -13,11 +13,13 @@ public interface ILeituraIotService
     bool Delete(long id);
 }
 
-public class LeituraIotService(ILeituraIotRepository repository) : ILeituraIotService
+public class LeituraIotService(ILeituraIotRepository repository, IEstacaoIotRepository estacaoRepository) : ILeituraIotService
 {
     public LeituraIotResponse Create(LeituraIotRequest request)
     {
-        var leitura = request.ToEntity();
+        var estacao = estacaoRepository.GetById(request.IdEstacao)
+            ?? throw new KeyNotFoundException($"Estação IoT com id '{request.IdEstacao}' não encontrada.");
+        var leitura = new Domain.Entities.LeituraIot(request.NrTemperatura, request.NrUmidade, request.NrChuvaMm, request.NrIndiceRisco, estacao);
         repository.Add(leitura);
         return LeituraIotResponse.ToDTO(leitura);
     }

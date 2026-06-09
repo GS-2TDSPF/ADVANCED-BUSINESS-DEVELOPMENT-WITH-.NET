@@ -34,9 +34,9 @@ public class UsuarioService(IUsuarioRepository usuarioRepository) : IUsuarioServ
     public UsuarioResponse Update(long id, UsuarioRequest request)
     {
         var usuario = usuarioRepository.GetById(id)
-            ?? throw new KeyNotFoundException("Usuário não encontrado.");
+                      ?? throw new KeyNotFoundException("Usuário não encontrado.");
         usuario.Transferir(request.NmUsuario, request.DsEmail, request.DsSenhaHash, request.TpPerfil, request.StAtivo);
-        usuarioRepository.SaveChanges();
+        usuarioRepository.Update(usuario);
         return UsuarioResponse.ToDTO(usuario);
     }
 

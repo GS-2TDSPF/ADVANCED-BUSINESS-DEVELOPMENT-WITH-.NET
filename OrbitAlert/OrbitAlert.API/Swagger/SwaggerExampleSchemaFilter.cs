@@ -117,18 +117,15 @@ public class SwaggerExampleSchemaFilter : ISchemaFilter
 
         if (context.Type == typeof(AlertaRequest))
         {
-            SetPropertyDescription(schema, "nrNivelRisco", "Nível de risco de 1 (baixo) a 5 (crítico).");
-            SetPropertyDescription(schema, "stStatus", "Status: ATIVO, EM_ATENDIMENTO, FECHADO ou CANCELADO.");
-            SetPropertyDescription(schema, "dsObservacao", "Observação adicional sobre o alerta. Opcional.");
-            SetPropertyDescription(schema, "dtFechamento", "Data de fechamento. Nulo se ainda ativo.");
-
             schema.Example = new OpenApiObject
             {
                 ["nrNivelRisco"] = new OpenApiInteger(4),
                 ["stStatus"] = new OpenApiString("ATIVO"),
-                ["dsObservacao"] = new OpenApiString("Precipitação acumulada de 80mm nas últimas 6h. Risco elevado.")
+                ["dsObservacao"] = new OpenApiString("Precipitação acumulada de 80mm nas últimas 6h."),
+                ["dtFechamento"] = new OpenApiNull(),
+                ["idZona"] = new OpenApiLong(1),         // ← adicionar
+                ["idTipoAlerta"] = new OpenApiLong(1)    // ← adicionar
             };
-            return;
         }
 
         if (context.Type == typeof(AnaliseIaRequest))

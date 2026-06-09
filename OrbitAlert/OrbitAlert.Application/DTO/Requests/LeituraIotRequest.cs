@@ -1,13 +1,8 @@
-using OrbitAlert.Domain.Entities;
-
 namespace OrbitAlert.Application.DTO.Requests;
 
 public record LeituraIotRequest(
-    double NrTemperatura,
-    double NrUmidade,
-    double NrChuvaMm,
+    decimal NrTemperatura,
+    decimal NrUmidade,
+    decimal NrChuvaMm,
     int NrIndiceRisco,
-    EstacaoIot EstacaoIot)
-{
-    public LeituraIot ToEntity() => new(NrTemperatura, NrUmidade, NrChuvaMm, NrIndiceRisco, EstacaoIot);
-}
+    long IdEstacao);

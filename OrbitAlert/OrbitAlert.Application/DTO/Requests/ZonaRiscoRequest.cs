@@ -1,5 +1,3 @@
-using OrbitAlert.Domain.Entities;
-
 namespace OrbitAlert.Application.DTO.Requests;
 
 public record ZonaRiscoRequest(
@@ -9,7 +7,4 @@ public record ZonaRiscoRequest(
     double NrLongitude,
     int NrLimiarAlerta,
     string StAtivo,
-    Municipio Municipio)
-{
-    public ZonaRisco ToEntity() => new(NmZona, DsDescricao, NrLatitude, NrLongitude, NrLimiarAlerta, StAtivo, Municipio);
-}
+    long IdMunicipio);

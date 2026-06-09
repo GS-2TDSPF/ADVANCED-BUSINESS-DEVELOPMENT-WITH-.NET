@@ -14,11 +14,15 @@ public interface INotificacaoService
     bool Delete(long id);
 }
 
-public class NotificacaoService(INotificacaoRepository repository) : INotificacaoService
+public class NotificacaoService(INotificacaoRepository repository, IUsuarioRepository usuarioRepository, IAlertaRepository alertaRepository) : INotificacaoService
 {
     public NotificacaoResponse Create(NotificacaoRequest request)
     {
-        var notificacao = request.ToEntity();
+        var usuario = usuarioRepository.GetById(request.IdUsuario)
+            ?? throw new KeyNotFoundException($"Usuário com id '{request.IdUsuario}' não encontrado.");
+        var alerta = alertaRepository.GetById(request.IdAlerta)
+            ?? throw new KeyNotFoundException($"Alerta com id '{request.IdAlerta}' não encontrado.");
+        var notificacao = new Domain.Entities.Notificacao(request.TpNotificacao, request.DsTitulo, request.DsMensagem, request.StLida, usuario, alerta);
         repository.Add(notificacao);
         return NotificacaoResponse.ToDTO(notificacao);
     }
@@ -39,8 +43,12 @@ public class NotificacaoService(INotificacaoRepository repository) : INotificaca
     {
         var notificacao = repository.GetById(id)
             ?? throw new KeyNotFoundException("Notificação não encontrada.");
-        notificacao.Transferir(request.TpNotificacao, request.DsTitulo, request.DsMensagem, request.StLida, request.Usuario, request.Alerta);
-        repository.SaveChanges();
+        var usuario = usuarioRepository.GetById(request.IdUsuario)
+            ?? throw new KeyNotFoundException($"Usuário com id '{request.IdUsuario}' não encontrado.");
+        var alerta = alertaRepository.GetById(request.IdAlerta)
+            ?? throw new KeyNotFoundException($"Alerta com id '{request.IdAlerta}' não encontrado.");
+        notificacao.Transferir(request.TpNotificacao, request.DsTitulo, request.DsMensagem, request.StLida, usuario, alerta);
+        repository.Update(notificacao);
         return NotificacaoResponse.ToDTO(notificacao);
     }
 

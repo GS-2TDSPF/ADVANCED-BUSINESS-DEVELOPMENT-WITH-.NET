@@ -14,11 +14,13 @@ public interface IAnaliseIaService
     bool Delete(long id);
 }
 
-public class AnaliseIaService(IAnaliseIaRepository repository) : IAnaliseIaService
+public class AnaliseIaService(IAnaliseIaRepository repository, IAlertaRepository alertaRepository) : IAnaliseIaService
 {
     public AnaliseIaResponse Create(AnaliseIaRequest request)
     {
-        var analise = request.ToEntity();
+        var alerta = alertaRepository.GetById(request.IdAlerta)
+            ?? throw new KeyNotFoundException($"Alerta com id '{request.IdAlerta}' não encontrado.");
+        var analise = new Domain.Entities.AnaliseIa(request.DsPrompt, request.DsResposta, request.DsModeloIa, request.NrTokensUsados, alerta);
         repository.Add(analise);
         return AnaliseIaResponse.ToDTO(analise);
     }
@@ -42,8 +44,10 @@ public class AnaliseIaService(IAnaliseIaRepository repository) : IAnaliseIaServi
     {
         var analise = repository.GetById(id)
             ?? throw new KeyNotFoundException("Análise de IA não encontrada.");
-        analise.Transferir(request.DsPrompt, request.DsResposta, request.DsModeloIa, request.NrTokensUsados, request.Alerta);
-        repository.SaveChanges();
+        var alerta = alertaRepository.GetById(request.IdAlerta)
+            ?? throw new KeyNotFoundException($"Alerta com id '{request.IdAlerta}' não encontrado.");
+        analise.Transferir(request.DsPrompt, request.DsResposta, request.DsModeloIa, request.NrTokensUsados, alerta);
+        repository.Update(analise);
         return AnaliseIaResponse.ToDTO(analise);
     }
 

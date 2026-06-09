@@ -1,5 +1,3 @@
-using OrbitAlert.Domain.Entities;
-
 namespace OrbitAlert.Application.DTO.Requests;
 
 public record HistoricoAlertaRequest(
@@ -8,7 +6,4 @@ public record HistoricoAlertaRequest(
     int? NrIndiceRisco,
     string? DsObservacao,
     string? NmUsuarioMod,
-    Alerta Alerta)
-{
-    public HistoricoAlerta ToEntity() => new(StStatusAnt, StStatusNovo, NrIndiceRisco, DsObservacao, NmUsuarioMod, Alerta);
-}
+    long IdAlerta);

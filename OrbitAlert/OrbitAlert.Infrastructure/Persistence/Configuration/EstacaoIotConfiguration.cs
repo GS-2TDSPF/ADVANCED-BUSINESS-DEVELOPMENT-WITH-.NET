@@ -11,10 +11,10 @@ public class EstacaoIotConfiguration : IEntityTypeConfiguration<EstacaoIot>
         builder.ToTable("TB_ESTACAO_IOT");
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("ID_ESTACAO").HasDefaultValueSql("SEQ_ESTACAO_IOT.NEXTVAL").ValueGeneratedOnAdd();
-        builder.Property(e => e.NmEstacao).HasColumnName("NM_ESTACAO").HasMaxLength(200).IsRequired();
-        builder.Property(e => e.DsLocalizacao).HasColumnName("DS_LOCALIZACAO").HasMaxLength(300);
-        builder.Property(e => e.StAtivo).HasColumnName("ST_ATIVO").HasMaxLength(1).IsRequired();
-        builder.Property(e => e.DtInstalacao).HasColumnName("DT_INSTALACAO").HasDefaultValueSql("SYSDATE").ValueGeneratedOnAdd();
+        builder.Property(e => e.NmEstacao).HasColumnName("NM_ESTACAO").HasColumnType("VARCHAR2(200)").IsRequired();
+        builder.Property(e => e.DsLocalizacao).HasColumnName("DS_LOCALIZACAO").HasColumnType("VARCHAR2(300)");
+        builder.Property(e => e.StAtivo).HasColumnName("ST_ATIVO").HasColumnType("VARCHAR2(1)").IsRequired();
+        builder.Property(e => e.DtInstalacao).HasColumnName("DT_INSTALACAO").HasColumnType("DATE").HasDefaultValueSql("SYSDATE").ValueGeneratedOnAdd();
         builder.HasOne(e => e.ZonaRisco).WithMany(z => z.Estacoes).HasForeignKey("ID_ZONA").OnDelete(DeleteBehavior.Restrict);
     }
 }

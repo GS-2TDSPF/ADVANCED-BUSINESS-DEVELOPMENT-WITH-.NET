@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OrbitAlert.API.Exceptions;
@@ -10,7 +11,11 @@ using OrbitAlert.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
@@ -42,23 +47,20 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<OrbitAlertContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("OrbitAlertOracle");
-    options.UseOracle(connectionString).UseLazyLoadingProxies();
+    options.UseOracle(connectionString);
 });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SchemaFilter<SwaggerExampleSchemaFilter>();
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "🛰️ OrbitAlert API",
         Version = "v1",
         Description = "Plataforma de alertas precoces de desastres naturais com dados orbitais Sentinel-1 e IA generativa. FIAP Global Solution 2026/1.",
-        Contact = new OpenApiContact
-        {
-            Name = "OrbitAlert — 2TDS Fevereiro"
-        }
+        Contact = new OpenApiContact { Name = "OrbitAlert — 2TDS Fevereiro" }
     });
+    options.SchemaFilter<SwaggerExampleSchemaFilter>();
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -68,7 +70,6 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 app.UseExceptionHandler();
-
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {

@@ -14,11 +14,13 @@ public interface IEstacaoIotService
     bool Delete(long id);
 }
 
-public class EstacaoIotService(IEstacaoIotRepository repository) : IEstacaoIotService
+public class EstacaoIotService(IEstacaoIotRepository repository, IZonaRiscoRepository zonaRepository) : IEstacaoIotService
 {
     public EstacaoIotResponse Create(EstacaoIotRequest request)
     {
-        var estacao = request.ToEntity();
+        var zona = zonaRepository.GetById(request.IdZona)
+            ?? throw new KeyNotFoundException($"Zona de risco com id '{request.IdZona}' não encontrada.");
+        var estacao = new Domain.Entities.EstacaoIot(request.NmEstacao, request.DsLocalizacao, request.StAtivo, zona);
         repository.Add(estacao);
         return EstacaoIotResponse.ToDTO(estacao);
     }
@@ -39,8 +41,10 @@ public class EstacaoIotService(IEstacaoIotRepository repository) : IEstacaoIotSe
     {
         var estacao = repository.GetById(id)
             ?? throw new KeyNotFoundException("Estação IoT não encontrada.");
-        estacao.Transferir(request.NmEstacao, request.DsLocalizacao, request.StAtivo, request.ZonaRisco);
-        repository.SaveChanges();
+        var zona = zonaRepository.GetById(request.IdZona)
+            ?? throw new KeyNotFoundException($"Zona de risco com id '{request.IdZona}' não encontrada.");
+        estacao.Transferir(request.NmEstacao, request.DsLocalizacao, request.StAtivo, zona);
+        repository.Update(estacao);
         return EstacaoIotResponse.ToDTO(estacao);
     }
 

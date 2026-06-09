@@ -34,9 +34,9 @@ public class TipoAlertaService(ITipoAlertaRepository repository) : ITipoAlertaSe
     public TipoAlertaResponse Update(long id, TipoAlertaRequest request)
     {
         var tipo = repository.GetById(id)
-            ?? throw new KeyNotFoundException("Tipo de alerta não encontrado.");
+                   ?? throw new KeyNotFoundException("Tipo de alerta não encontrado.");
         tipo.Transferir(request.NmTipo, request.DsDescricao);
-        repository.SaveChanges();
+        repository.Update(tipo);
         return TipoAlertaResponse.ToDTO(tipo);
     }
 

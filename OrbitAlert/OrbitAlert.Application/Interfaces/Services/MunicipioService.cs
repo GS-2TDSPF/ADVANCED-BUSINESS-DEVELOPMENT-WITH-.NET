@@ -38,9 +38,9 @@ public class MunicipioService(IMunicipioRepository municipioRepository) : IMunic
     public MunicipioResponse Update(long id, MunicipioRequest request)
     {
         var municipio = municipioRepository.GetById(id)
-            ?? throw new KeyNotFoundException("Município não encontrado.");
+                        ?? throw new KeyNotFoundException("Município não encontrado.");
         municipio.Transferir(request.NmMunicipio, request.NmEstado, request.NrLatitude, request.NrLongitude, request.NrPopulacao, request.StAtivo);
-        municipioRepository.SaveChanges();
+        municipioRepository.Update(municipio);
         return MunicipioResponse.ToDTO(municipio);
     }
 

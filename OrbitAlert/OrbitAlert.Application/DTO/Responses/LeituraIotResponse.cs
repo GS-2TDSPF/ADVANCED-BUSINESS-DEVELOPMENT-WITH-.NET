@@ -4,9 +4,9 @@ namespace OrbitAlert.Application.DTO.Responses;
 
 public record LeituraIotResponse(
     long Id,
-    double NrTemperatura,
-    double NrUmidade,
-    double NrChuvaMm,
+    decimal NrTemperatura,
+    decimal NrUmidade,
+    decimal NrChuvaMm,
     int NrIndiceRisco,
     DateTime DtLeitura,
     EstacaoIotResponse EstacaoIot)

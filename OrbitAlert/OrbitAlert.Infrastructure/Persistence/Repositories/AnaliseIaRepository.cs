@@ -1,23 +1,47 @@
+using Microsoft.EntityFrameworkCore;
 using OrbitAlert.Application.Interfaces.Repositories;
 using OrbitAlert.Domain.Entities;
+using OrbitAlert.Infrastructure.Persistence;
 
 namespace OrbitAlert.Infrastructure.Persistence.Repositories;
 
 public class AnaliseIaRepository(OrbitAlertContext context) : IAnaliseIaRepository
 {
-    public IReadOnlyList<AnaliseIa> GetAll() => context.AnalisesIa.ToList();
-    public AnaliseIa? GetById(long id) => context.AnalisesIa.FirstOrDefault(a => a.Id == id);
-    public AnaliseIa? GetByAlerta(long idAlerta) => context.AnalisesIa.FirstOrDefault(a => a.Alerta.Id == idAlerta);
+    public IReadOnlyList<AnaliseIa> GetAll() =>
+        context.AnalisesIa.AsNoTracking().Include(a => a.Alerta).ToList();
 
-    public void Add(AnaliseIa analise) { context.AnalisesIa.Add(analise); context.SaveChanges(); }
-    public void Update(AnaliseIa analise) { context.AnalisesIa.Update(analise); context.SaveChanges(); }
+    public AnaliseIa? GetById(long id) =>
+        context.AnalisesIa.AsNoTracking()
+            .Include(a => a.Alerta)
+            .FirstOrDefault(a => a.Id == id);
+
+    public AnaliseIa? GetByAlerta(long idAlerta) =>
+        context.AnalisesIa.AsNoTracking()
+            .Include(a => a.Alerta)
+            .FirstOrDefault(a => EF.Property<long>(a, "ID_ALERTA") == idAlerta);
+
+    public void Add(AnaliseIa analise)
+    {
+        context.Entry(analise).State = EntityState.Added;
+        context.Entry(analise).Property("ID_ALERTA").CurrentValue = analise.Alerta.Id;
+        context.SaveChanges();
+    }
+
+    public void Update(AnaliseIa analise)
+    {
+        context.Entry(analise).State = EntityState.Modified;
+        context.Entry(analise).Property("ID_ALERTA").CurrentValue = analise.Alerta.Id;
+        context.SaveChanges();
+    }
 
     public bool Delete(long id)
     {
-        var analise = context.AnalisesIa.FirstOrDefault(a => a.Id == id);
-        if (analise is null) return false;
-        context.AnalisesIa.Remove(analise);
-        context.SaveChanges();
+        // ✅ FIX: Usar FirstOrDefault ao invés de Any
+        var exists = context.AnalisesIa.AsNoTracking()
+            .FirstOrDefault(a => a.Id == id) != null;
+        if (!exists) return false;
+
+        context.Database.ExecuteSqlRaw("DELETE FROM TB_ANALISE_IA WHERE ID_ANALISE = {0}", id);
         return true;
     }
 

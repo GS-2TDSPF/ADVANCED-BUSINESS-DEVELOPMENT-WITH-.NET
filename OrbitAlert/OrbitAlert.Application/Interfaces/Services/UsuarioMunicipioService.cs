@@ -13,11 +13,15 @@ public interface IUsuarioMunicipioService
     bool Delete(long idUsuario, long idMunicipio);
 }
 
-public class UsuarioMunicipioService(IUsuarioMunicipioRepository repository) : IUsuarioMunicipioService
+public class UsuarioMunicipioService(IUsuarioMunicipioRepository repository, IUsuarioRepository usuarioRepository, IMunicipioRepository municipioRepository) : IUsuarioMunicipioService
 {
     public UsuarioMunicipioResponse Create(UsuarioMunicipioRequest request)
     {
-        var vinculo = request.ToEntity();
+        var usuario = usuarioRepository.GetById(request.IdUsuario)
+            ?? throw new KeyNotFoundException($"Usuário com id '{request.IdUsuario}' não encontrado.");
+        var municipio = municipioRepository.GetById(request.IdMunicipio)
+            ?? throw new KeyNotFoundException($"Município com id '{request.IdMunicipio}' não encontrado.");
+        var vinculo = new Domain.Entities.UsuarioMunicipio(usuario, municipio);
         repository.Add(vinculo);
         return UsuarioMunicipioResponse.ToDTO(vinculo);
     }

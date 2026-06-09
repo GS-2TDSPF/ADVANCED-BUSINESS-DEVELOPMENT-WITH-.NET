@@ -10,8 +10,8 @@ public class Notificacao
     public string? DsMensagem { get; private set; }
     public string StLida { get; private set; } = "N";
     public DateTime DtEnvio { get; private set; }
-    public virtual Usuario Usuario { get; private set; } = null!;
-    public virtual Alerta Alerta { get; private set; } = null!;
+    public virtual Usuario Usuario { get; set; } = null!;
+    public virtual Alerta Alerta { get; set; } = null!;
 
     public Notificacao(TipoNotificacaoEnum tpNotificacao, string dsTitulo, string? dsMensagem, string stLida, Usuario usuario, Alerta alerta)
     {

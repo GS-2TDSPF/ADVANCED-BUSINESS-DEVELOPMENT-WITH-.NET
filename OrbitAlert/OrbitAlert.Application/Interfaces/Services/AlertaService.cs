@@ -16,11 +16,15 @@ public interface IAlertaService
     bool Delete(long id);
 }
 
-public class AlertaService(IAlertaRepository repository) : IAlertaService
+public class AlertaService(IAlertaRepository repository, IZonaRiscoRepository zonaRepository, ITipoAlertaRepository tipoRepository) : IAlertaService
 {
     public AlertaResponse Create(AlertaRequest request)
     {
-        var alerta = request.ToEntity();
+        var zona = zonaRepository.GetById(request.IdZona)
+            ?? throw new KeyNotFoundException($"Zona de risco com id '{request.IdZona}' não encontrada.");
+        var tipo = tipoRepository.GetById(request.IdTipoAlerta)
+            ?? throw new KeyNotFoundException($"Tipo de alerta com id '{request.IdTipoAlerta}' não encontrado.");
+        var alerta = new Domain.Entities.Alerta(request.NrNivelRisco, request.StStatus, request.DsObservacao, request.DtFechamento, zona, tipo);
         repository.Add(alerta);
         return AlertaResponse.ToDTO(alerta);
     }
@@ -43,9 +47,13 @@ public class AlertaService(IAlertaRepository repository) : IAlertaService
     public AlertaResponse Update(long id, AlertaRequest request)
     {
         var alerta = repository.GetById(id)
-                     ?? throw new KeyNotFoundException("Alerta não encontrado.");
-        alerta.Transferir(request.NrNivelRisco, request.StStatus, request.DsObservacao, request.DtFechamento, request.ZonaRisco, request.TipoAlerta);
-        repository.SaveChanges();
+            ?? throw new KeyNotFoundException("Alerta não encontrado.");
+        var zona = zonaRepository.GetById(request.IdZona)
+            ?? throw new KeyNotFoundException($"Zona de risco com id '{request.IdZona}' não encontrada.");
+        var tipo = tipoRepository.GetById(request.IdTipoAlerta)
+            ?? throw new KeyNotFoundException($"Tipo de alerta com id '{request.IdTipoAlerta}' não encontrado.");
+        alerta.Transferir(request.NrNivelRisco, request.StStatus, request.DsObservacao, request.DtFechamento, zona, tipo);
+        repository.Update(alerta);
         return AlertaResponse.ToDTO(alerta);
     }
 

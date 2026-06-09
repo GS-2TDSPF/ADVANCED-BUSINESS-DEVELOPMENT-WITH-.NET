@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using OrbitAlert.Domain.Entities;
 
@@ -20,6 +21,19 @@ public class OrbitAlertContext(DbContextOptions<OrbitAlertContext> options) : Db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrbitAlertContext).Assembly);
+    
+        modelBuilder.HasSequence<long>("SEQ_ALERTA");
+        modelBuilder.HasSequence<long>("SEQ_ZONA_RISCO");
+        modelBuilder.HasSequence<long>("SEQ_TIPO_ALERTA");
+        modelBuilder.HasSequence<long>("SEQ_ESTACAO_IOT");
+        modelBuilder.HasSequence<long>("SEQ_MUNICIPIO");
+        modelBuilder.HasSequence<long>("SEQ_USUARIO");
+        modelBuilder.HasSequence<long>("SEQ_LEITURA_IOT");
+        modelBuilder.HasSequence<long>("SEQ_HISTORICO_ALERTA");
+        modelBuilder.HasSequence<long>("SEQ_ANALISE_IA");
+        modelBuilder.HasSequence<long>("SEQ_NOTIFICACAO");
+        modelBuilder.HasSequence<long>("SEQ_USUARIO_MUNICIPIO");
+    
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

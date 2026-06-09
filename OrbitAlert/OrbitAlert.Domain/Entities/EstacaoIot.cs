@@ -9,7 +9,7 @@ public class EstacaoIot
     public string? DsLocalizacao { get; private set; }
     public string StAtivo { get; private set; } = "S";
     public DateTime DtInstalacao { get; private set; }
-    public virtual ZonaRisco ZonaRisco { get; private set; } = null!;
+    public virtual ZonaRisco ZonaRisco { get; set; } = null!;
 
     [JsonIgnore]
     public virtual List<LeituraIot> Leituras { get; private set; } = [];
