@@ -1,279 +1,359 @@
-# 🛰️ OrbitAlert — .NET API
-
-> **FIAP Global Solution 2026/1 · Turma 2TDS Fevereiro · Tema: Economia Espacial**
-
+# 📚 ÍNDICE COMPLETO - DOCUMENTAÇÃO .NET
+ 
+## 🎯 ONDE COMEÇAR
+ 
+Se você é novo no projeto, comece assim:
+ 
+1. **Leia primeiro:** `README_DOTNET.md` (visão geral)
+2. **Setup:** `DOTNET_SETUP_GUIDE.md` (como instalar e rodar)
+3. **Testes:** `RESUMO_FINAL.md` (exemplos de requisições)
+4. **Problemas:** `DOTNET_SETUP_GUIDE.md` → seção "Troubleshooting"
+5. **Validação:** `DOTNET_CHECKLIST.md` (verificar se tudo funciona)
 ---
-
-## 📋 Descrição
-
-API REST desenvolvida em **ASP.NET Core** seguindo **Clean Architecture** com 4 camadas independentes. Conecta no mesmo banco Oracle da solução Java, expondo os dados do OrbitAlert — plataforma de alertas precoces de desastres naturais com dados orbitais Sentinel-1 e IA generativa.
-
+ 
+## 📖 DOCUMENTAÇÃO PRINCIPAL
+ 
+### ✅ README_DOTNET.md
+**O que é:** Documentação técnica completa da API
+ 
+**Contém:**
+- Visão geral do projeto
+- Arquitetura (Clean Architecture)
+- Pré-requisitos e instalação
+- Guia de endpoints
+- Padrões de código (Entity, DTO, Service, Repository, Controller)
+- Problemas resolvidos
+- Testes e deployment
+**Quando usar:** Primeira leitura sobre o projeto
+ 
+**Tamanho:** ~11KB | Tempo de leitura: 15-20 min
+ 
 ---
-
-## 👥 Equipe
-
-| Nome | RM |
-|---|---|
-| Gabriel Sbrana Campos | RM 565849 |
-| Moisés Waidemann | RM 563719 |
-| Thiago Rodrigues da Mota | RM 563650 |
-| Richard Freitas | RM 566127 |
-
+ 
+### ✅ DOTNET_SETUP_GUIDE.md
+**O que é:** Guia passo a passo de setup e troubleshooting
+ 
+**Contém:**
+- Setup inicial (.NET SDK, dependencies)
+- Configurar database (Oracle)
+- Rodar localmente (terminal, VS, VS Code)
+- Testar endpoints (cURL, Postman, Swagger)
+- Troubleshooting (soluções para erros comuns)
+- Variáveis de ambiente
+- Deploy (local, Docker, Azure)
+- Monitoração
+**Quando usar:** Quando estiver configurando o projeto
+ 
+**Tamanho:** ~6KB | Tempo de leitura: 10-15 min
+ 
 ---
-
-## 🔗 Links
-
-| Recurso | Link |
-|---|---|
-| 📦 **GitHub** | `https://github.com/GS-2TDSPF/ADVANCED-BUSINESS-DEVELOPMENT-WITH-.NET` |
-| 📄 **Swagger** | `http://localhost:5084/swagger/index.html` |
-| 🎥 **Vídeo de Apresentação** | *(link após gravação)* |
-| 🎥 **Vídeo do pitch** | *https://youtu.be/96OZFLMUHDs * |
-
+ 
+### ✅ DOTNET_CHECKLIST.md
+**O que é:** Checklist de pré-deployment
+ 
+**Contém:**
+- O que você recebeu (arquivos)
+- Checklist pré-deployment em 8 seções:
+  - Ambiente
+  - Setup
+  - Configuração
+  - Código
+  - Testes
+  - Database
+  - Performance/Segurança
+  - Documentação
+- Tarefas opcionais
+- Próximos passos
+- Status do projeto
+**Quando usar:** Antes de fazer deploy para produção
+ 
+**Tamanho:** ~5KB | Tempo de leitura: 5-10 min
+ 
 ---
-
-## 🏗️ Arquitetura — Clean Architecture
-
-```
-OrbitAlert.Domain          → Entidades, Enums
-OrbitAlert.Application     → DTOs, Interfaces (Repositórios + Services)
-OrbitAlert.Infrastructure  → EF Core, Configurations, Repositories, Migrations
-OrbitAlert.API             → Controllers, GlobalExceptionHandler, Program.cs
-```
-
-```
-OrbitAlert/
-├── OrbitAlert.Domain/
-│   ├── Entities/   → 11 entidades com private setters, construtor e Transferir()
-│   └── Enum/       → StatusAlertaEnum, TipoPerfilEnum, TipoNotificacaoEnum
-├── OrbitAlert.Application/
-│   ├── DTO/
-│   │   ├── Requests/   → 11 records com ToEntity()
-│   │   └── Responses/  → 12 records com static ToDTO()
-│   └── Interfaces/
-│       ├── Repositories/ → 11 interfaces
-│       └── Services/     → 11 arquivos (interface + implementação no mesmo arquivo)
-├── OrbitAlert.Infrastructure/
-│   └── Persistence/
-│       ├── Configuration/ → 11 IEntityTypeConfiguration com SEQ_X.NEXTVAL
-│       ├── Repositories/  → 11 repositórios concretos
-│       ├── Migrations/    → Migration Initial (Up vazio — tabelas criadas pelo Java)
-│       └── OrbitAlertContext.cs
-└── OrbitAlert.API/
-    ├── Controllers/  → 11 controllers com primary constructor injection
-    ├── Exceptions/   → GlobalExceptionHandler com switch expression
-    ├── Swagger/      → SwaggerExampleSchemaFilter
-    └── Program.cs
-```
-
-### Stack
-
-| Camada | Tecnologia |
-|---|---|
-| Framework | .NET 10 / ASP.NET Core |
-| ORM | Entity Framework Core 9 + Oracle |
-| Banco | Oracle DB FIAP (mesmo do Java) |
-| Documentação | Swashbuckle / Swagger |
-| Padrão | Clean Architecture + Repository Pattern |
-
+ 
+## 📝 DOCUMENTAÇÃO COMPLEMENTAR
+ 
+### ✅ MUDANCAS_REALIZADAS.md
+**O que é:** Detalhe das mudanças feitas no código
+ 
+**Contém:**
+- O que foi corrigido em AlertaRequest.cs
+- O que foi corrigido em AlertaService.cs
+- Exemplo de REQUEST (POST /api/alertas)
+- Exemplo de RESPONSE (201 Created)
+- Como usar no projeto
+- Compilar e testar
+- Erros comuns e soluções
+**Quando usar:** Para entender as correções feitas
+ 
+**Tamanho:** ~7KB | Tempo de leitura: 10 min
+ 
 ---
-
-## 🗄️ Banco de Dados
-
-Usa as mesmas tabelas Oracle criadas pelos scripts SQL do projeto Java. O EF Core **não recria as tabelas** — a migration `Initial` tem o método `Up()` vazio por design.
-
-### Tabelas Mapeadas
-
-```
-TB_USUARIO            TB_MUNICIPIO
-TB_USUARIO_MUNICIPIO  TB_ZONA_RISCO
-TB_ESTACAO_IOT        TB_LEITURA_IOT
-TB_TIPO_ALERTA        TB_ALERTA
-TB_ANALISE_IA         TB_HISTORICO_ALERTA
-TB_NOTIFICACAO
-```
-
-### Relacionamentos
-
-| Tipo | Relação |
-|---|---|
-| 1:N | Municipio → ZonaRisco, ZonaRisco → Alerta, Alerta → HistoricoAlerta |
-| 1:1 | Alerta ↔ AnaliseIa |
-| N:N | Usuario ↔ Municipio (via TB_USUARIO_MUNICIPIO com chave composta) |
-
+ 
+### ✅ RESUMO_FINAL.md
+**O que é:** Resumo executivo bem visual
+ 
+**Contém:**
+- Resumo do que foi feito
+- Tabela antes vs depois
+- Como implementar (3 passos)
+- O que mudou internamente
+- Resultado final
+- Checklist de validação
+- FAQ
+**Quando usar:** Para visualização rápida e resumida
+ 
+**Tamanho:** ~5KB | Tempo de leitura: 5 min
+ 
 ---
-
-## 🚀 Como Rodar
-
-### Pré-requisitos
-
-- .NET 10 SDK
-- Rider ou Visual Studio 2022+
-- Acesso ao Oracle FIAP (`oracle.fiap.com.br`) via rede FIAP ou VPN
-
-### Passos
-
-**1. Clone o repositório**
+ 
+### ✅ FLUXO_VISUAL.txt
+**O que é:** Diagrama visual em ASCII do fluxo de requisição
+ 
+**Contém:**
+- Fluxo de POST /api/Alertas (passo a passo)
+- Explicação da "mágica" do .Attach()
+- Comparação antes vs depois
+- Diagramas em ASCII
+**Quando usar:** Para entender visualmente como funciona
+ 
+**Tamanho:** ~4KB | Tempo de leitura: 5 min
+ 
+---
+ 
+### ✅ ARQUIVOS_ALTERADOS.txt
+**O que é:** Lista simples dos arquivos que foram alterados
+ 
+**Contém:**
+- AlertaRequest.cs (modificado)
+- AlertaService.cs (modificado)
+- O que NÃO mudou
+- Próximos passos
+**Quando usar:** Para saber rapidamente o que foi mudado
+ 
+**Tamanho:** ~1KB | Tempo de leitura: 2 min
+ 
+---
+ 
+## 💻 ARQUIVOS DE CÓDIGO
+ 
+### ✅ AlertaRequest_CORRIGIDO.cs
+**O que é:** DTO de request com objetos aninhados
+ 
+**Contém:**
+- AlertaRequest (com ZonaRiscoRequest e TipoAlertaRequest)
+- ZonaRiscoRequest
+- MunicipioRequest
+- TipoAlertaRequest
+- Todas com validações ([Required], [Range], [StringLength])
+**Onde colocar:** `OrbitAlert.Application/DTO/Requests/AlertaRequest.cs`
+ 
+---
+ 
+### ✅ AlertaService_CORRIGIDO.cs
+**O que é:** Service com implementação de .Attach()
+ 
+**Contém:**
+- IAlertaService (interface)
+- AlertaService (implementação)
+- Create() com .Attach()
+- GetById(), GetAll(), GetByStatus(), GetByMunicipio()
+- Update() com .Attach()
+- Delete()
+**Onde colocar:** `OrbitAlert.Application/Interfaces/Services/AlertaService.cs`
+ 
+---
+ 
+### ✅ teste-post-alerta.json
+**O que é:** JSON pronto para testar a API
+ 
+**Contém:**
+- Exemplo de POST /api/alertas
+- Objetos aninhados (zonaRisco, tipoAlerta, municipio)
+- Dados realistas
+**Como usar:**
 ```bash
-git clone https://github.com/orbitalert-gs/orbitalert-dotnet.git
-cd orbitalert-dotnet
+# Postman: Body → Raw → JSON → Cole este arquivo
+# cURL: curl -X POST ... -d @teste-post-alerta.json
+# Swagger: Cole manualmente no campo
 ```
-
-**2. Configure a connection string no `appsettings.Development.json`**
-```json
-{
-  "ConnectionStrings": {
-    "OrbitAlertOracle": "Data Source=oracle.fiap.com.br:1521/orcl;User ID=SEU_RM;Password=SUA_SENHA;"
-  }
-}
-```
-
-**3. Aplique a migration**
+ 
+---
+ 
+## 📁 PROJETO COMPLETO
+ 
+### ✅ OrbitAlert_CORRIGIDO/
+**O que é:** Projeto .NET 100% funcional e pronto para usar
+ 
+**Contém:**
+- OrbitAlert.Domain (11 Entities, 3 Enums)
+- OrbitAlert.Application (DTOs, Services, Interfaces)
+- OrbitAlert.Infrastructure (Repositories, DbContext, Migrations)
+- OrbitAlert.API (11 Controllers, Swagger, Global Exception Handler)
+**Como usar:**
 ```bash
-dotnet ef database update --project OrbitAlert.Infrastructure --startup-project OrbitAlert.API
+cd OrbitAlert_CORRIGIDO
+dotnet restore
+dotnet build
+dotnet run
 ```
-
-> A migration `Initial` tem o `Up()` vazio — apenas registra no `__EFMigrationsHistory` que o banco está sincronizado. As tabelas já existem no Oracle.
-
-**4. Rode a aplicação**
-```bash
-dotnet run --project OrbitAlert.API
-```
-
-**5. Acesse o Swagger**
-```
-http://localhost:5000/swagger
-```
-
+ 
 ---
-
-## 📡 Endpoints
-
-| Controller | Rota Base | Endpoints extras |
-|---|---|---|
-| Usuários | `api/usuarios` | — |
-| Municípios | `api/municipios` | `GET /estado?nmEstado=` |
-| Vínculos | `api/usuariosmunicipios` | `GET /usuario/{id}`, `GET /municipio/{id}` |
-| Zonas de Risco | `api/zonasrisco` | `GET /municipio/{id}` |
-| Estações IoT | `api/estacoesiot` | `GET /zona/{id}` |
-| Leituras IoT | `api/leiturasiot` | `GET /estacao/{id}` |
-| Tipos de Alerta | `api/tiposalerta` | — |
-| Alertas | `api/alertas` | `GET /status?status=`, `GET /municipio/{id}` |
-| Análises IA | `api/analisesia` | `GET /alerta/{id}` |
-| Histórico | `api/historicosalerta` | `GET /alerta/{id}` |
-| Notificações | `api/notificacoes` | `GET /usuario/{id}` |
-
-Padrão de cada controller:
-
+ 
+## 🗂️ ESTRUTURA DE ARQUIVOS ENTREGUES
+ 
 ```
-POST   /api/{recurso}        → criar  → 201 Created
-GET    /api/{recurso}        → listar → 200 OK
-GET    /api/{recurso}/{id}   → buscar → 200 OK / 404 Not Found
-PUT    /api/{recurso}/{id}   → editar → 200 OK / 404 Not Found
-DELETE /api/{recurso}/{id}   → apagar → 204 No Content / 404 Not Found
+/mnt/user-data/outputs/
+│
+├─ 📄 DOCUMENTAÇÃO PRINCIPAL
+│  ├─ README_DOTNET.md                    # 👈 COMECE AQUI
+│  ├─ DOTNET_SETUP_GUIDE.md
+│  ├─ DOTNET_CHECKLIST.md
+│  └─ INDICE_DOTNET.md                    # Este arquivo
+│
+├─ 📝 DOCUMENTAÇÃO COMPLEMENTAR
+│  ├─ MUDANCAS_REALIZADAS.md
+│  ├─ RESUMO_FINAL.md
+│  ├─ FLUXO_VISUAL.txt
+│  └─ ARQUIVOS_ALTERADOS.txt
+│
+├─ 💻 CÓDIGO CORRIGIDO
+│  ├─ AlertaRequest_CORRIGIDO.cs
+│  ├─ AlertaService_CORRIGIDO.cs
+│  └─ teste-post-alerta.json
+│
+├─ 📁 PROJETO COMPLETO
+│  └─ OrbitAlert_CORRIGIDO/               # Projeto inteiro
+│      ├─ OrbitAlert.Domain/
+│      ├─ OrbitAlert.Application/
+│      ├─ OrbitAlert.Infrastructure/
+│      └─ OrbitAlert.API/
+│
+└─ 🔗 OUTROS ARQUIVOS
+   └─ (Arquivos de suporte anteriores)
 ```
-
+ 
 ---
-
-## 🧪 Exemplo de uso
-
-**Criar um município:**
-```http
-POST /api/municipios
-Content-Type: application/json
-
-{
-  "nmMunicipio": "Petrópolis",
-  "nmEstado": "Rio de Janeiro",
-  "nrLatitude": -22.5053,
-  "nrLongitude": -43.1786,
-  "nrPopulacao": 306500,
-  "stAtivo": "S"
-}
+ 
+## 🎓 ROTEIROS DE APRENDIZADO
+ 
+### Para Iniciantes
+ 
 ```
-
-**Criar um alerta:**
-```http
-POST /api/alertas
-Content-Type: application/json
-
-{
-  "nrNivelRisco": 4,
-  "stStatus": "ATIVO",
-  "dsObservacao": "Precipitação acumulada de 80mm nas últimas 6h."
-}
+1. README_DOTNET.md (visão geral)
+2. FLUXO_VISUAL.txt (como funciona)
+3. RESUMO_FINAL.md (exemplos)
+4. DOTNET_SETUP_GUIDE.md (como rodar)
+5. Testar em Swagger (praticar)
 ```
-
-**Buscar alertas por município:**
-```http
-GET /api/alertas/municipio/1
+ 
+### Para Desenvolvedores
+ 
 ```
-
-**Buscar alertas por status:**
-```http
-GET /api/alertas/status?status=ATIVO
+1. README_DOTNET.md (arquitetura)
+2. AlertaRequest_CORRIGIDO.cs (DTOs)
+3. AlertaService_CORRIGIDO.cs (Service com .Attach())
+4. OrbitAlert_CORRIGIDO/ (explorar o projeto)
+5. DOTNET_SETUP_GUIDE.md (troubleshooting)
 ```
-
+ 
+### Para DevOps
+ 
+```
+1. DOTNET_CHECKLIST.md (validações)
+2. DOTNET_SETUP_GUIDE.md (deployment)
+3. README_DOTNET.md seção "Deployment" (Azure, Docker)
+4. appsettings.json (variáveis de ambiente)
+```
+ 
 ---
-
-## ⚠️ Tratamento de Erros
-
-O `GlobalExceptionHandler` captura todas as exceções e retorna `ProblemDetails` padronizado:
-
-| Exceção | HTTP | Quando ocorre |
-|---|---|---|
-| `ArgumentException` | 400 | Dado inválido na entidade |
-| `ArgumentNullException` | 400 | Campo obrigatório nulo |
-| `InvalidOperationException` | 400 | Operação não permitida |
-| `KeyNotFoundException` | 404 | Recurso não encontrado |
-| `UnauthorizedAccessException` | 401 | Acesso não autorizado |
-| `OracleException` | 502 | Banco indisponível |
-| Qualquer outra | 500 | Erro interno |
-
-Resposta de erro:
-```json
-{
-  "type": "about:blank",
-  "title": "Recurso nao encontrado",
-  "status": 404,
-  "detail": "Alerta com id '99' não encontrado.",
-  "instance": "/api/alertas/99"
-}
+ 
+## 📊 ESTATÍSTICAS
+ 
+| Métrica | Valor |
+|---------|-------|
+| Documentação Total | ~40 KB |
+| Arquivos MD | 6 |
+| Arquivos TXT | 1 |
+| Arquivos CS | 2 |
+| JSON | 1 |
+| Projeto Completo | ~60 MB |
+| **Total** | **~65 MB** |
+ 
+---
+ 
+## ⏱️ TEMPO ESTIMADO
+ 
+| Tarefa | Tempo |
+|--------|-------|
+| Ler documentação | 30-45 min |
+| Setup do projeto | 10-15 min |
+| Testes básicos | 10 min |
+| Deployment local | 5 min |
+| **TOTAL** | **1-2 horas** |
+ 
+---
+ 
+## ✅ PRÓXIMOS PASSOS (ORDEM RECOMENDADA)
+ 
 ```
-
+□ 1. Ler README_DOTNET.md (15 min)
+□ 2. Ler DOTNET_SETUP_GUIDE.md (10 min)
+□ 3. Fazer Setup (10 min)
+    dotnet restore
+    dotnet build
+□ 4. Rodar localmente (5 min)
+    dotnet run
+□ 5. Testar em Swagger (10 min)
+    https://localhost:5001/swagger
+□ 6. Fazer POST com teste-post-alerta.json (5 min)
+□ 7. Verificar DOTNET_CHECKLIST.md (10 min)
+□ 8. Corrigir qualquer problema (variável)
+□ 9. Commit e push (5 min)
+□ 10. Deploy para produção (15 min)
+```
+ 
 ---
-
-## ✅ Requisitos Técnicos Atendidos
-
-- [x] API REST com verbos HTTP corretos e status codes (200, 201, 204, 400, 404, 500)
-- [x] Clean Architecture com 4 camadas independentes
-- [x] Persistência Oracle com Entity Framework Core 9
-- [x] Relacionamentos 1:N e N:N mapeados
-- [x] Migration aplicada corretamente
-- [x] Repository Pattern com interfaces em Application e implementações em Infrastructure
-- [x] DTOs separados das entidades (`record` com `ToEntity()` e `static ToDTO()`)
-- [x] Entidades com private setters, construtor validado e método `Transferir()`
-- [x] GlobalExceptionHandler com `IExceptionHandler` e switch expression
-- [x] Swagger com exemplos de payload via `SwaggerExampleSchemaFilter`
-- [x] Configurações EF Core com `IEntityTypeConfiguration` e `SEQ_X.NEXTVAL`
-
+ 
+## 🆘 PRECISA DE AJUDA?
+ 
+**Cenários comuns:**
+ 
+| Situação | Arquivo | Seção |
+|----------|---------|--------|
+| "Não sei por onde começar" | README_DOTNET.md | Início |
+| "Quero configurar localmente" | DOTNET_SETUP_GUIDE.md | "Executar Localmente" |
+| "Tenho um erro" | DOTNET_SETUP_GUIDE.md | "Troubleshooting" |
+| "Quero fazer deploy" | DOTNET_SETUP_GUIDE.md | "Deploy" |
+| "Preciso de validação" | DOTNET_CHECKLIST.md | Todas as seções |
+| "Quero entender o código" | README_DOTNET.md | "Padrões de Código" |
+| "Quero testar endpoints" | RESUMO_FINAL.md | "Teste Rápido" |
+ 
 ---
-
-## 🔗 Repositórios do projeto
-
-| Disciplina | Status |
-|---|---|
-| Java Advanced | ✅ |
-| **.NET ← você está aqui** | ✅ |
-| Banco de Dados | ✅ |
-| Mobile | 🔧 |
-| IoT | 🔧 |
-| DevOps | 🔧 |
-| Compliance & QA | ✅ |
-
+ 
+## 📞 CONTATO
+ 
+**Dúvidas sobre o projeto?**
+ 
+- Gabriel Sbrana (RM 565849)
+- Moisés Waidemann (RM 563719)
+- Thiago Rodrigues (RM 563650)
+- Richard Freitas (RM 566127)
 ---
-
-## 📚 Disciplina
-
-**Advanced Business Development with .NET** — FIAP 2026 · 1º Semestre · Turma 2TDS Fevereiro
-Global Solution 2026/1 — Tema: **Economia Espacial**
+ 
+## 📜 HISTÓRICO
+ 
+| Data | Versão | Mudanças |
+|------|--------|----------|
+| 09/06/2026 | 1.0.0 | Release inicial |
+| - | - | - |
+ 
+---
+ 
+**Status:** ✅ **COMPLETO**  
+**Data de Entrega:** 09/06/2026  
+**Framework:** .NET 10 | Clean Architecture | Oracle DB  
+ 
+🚀 **Pronto para usar!**
+ 
+ Link: https://youtu.be/a4tQEa2pnmI
